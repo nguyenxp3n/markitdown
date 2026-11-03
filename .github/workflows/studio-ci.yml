@@ -24,5 +24,7 @@ jobs:
           pip install fastapi uvicorn python-multipart httpx pytest
 
       - name: Run Studio UI Tests
+        env:
+          PYTHONPATH: .
         run: |
-          pytest tests/test_studio_ui.py -v
+          python -m pytest tests/test_studio_ui.py -v
