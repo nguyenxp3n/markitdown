@@ -166,3 +166,9 @@ cython_debug/
 src/.DS_Store
 .DS_Store
 .cursorrules
+
+# MarkItDown Studio artifacts
+extracted_images/*
+!extracted_images/.gitkeep
+*.tmp
+

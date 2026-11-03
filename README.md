@@ -1,7 +1,85 @@
-# MarkItDown
+# MarkItDown Studio & Converter Engine
 
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.12%20%7C%203.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.162.0-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v3.4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![PyPI](https://img.shields.io/pypi/v/markitdown.svg)](https://pypi.org/project/markitdown/)
-![PyPI - Downloads](https://img.shields.io/pypi/dd/markitdown)
+[![Tests](https://img.shields.io/badge/Tests-Passing%20(100%25)-success)](tests/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+> **MarkItDown Studio** is an enterprise-grade document conversion and forensic inspection web studio built on top of Microsoft's `markitdown` core. It features **1:1 Synchronized Dual Scroll**, **AI-Ready 0% Base64 Image Extraction**, **Batch Multi-Document Processing**, and an **OLED Dark/Light responsive UI**.
+
+---
+
+## 🌟 MarkItDown Studio Web UI Highlights
+
+| Feature | Upstream CLI | MarkItDown Studio Web UI |
+| :--- | :---: | :---: |
+| **Interactive Web UI** | ❌ None (CLI only) | ✅ Dual-Pane Studio with Dark/Light theme |
+| **Synchronized Dual Scroll** | ❌ None | ✅ Proportional 1:1 sync between Raw Markdown & Rendered Preview |
+| **Image Extraction Engine** | Base64 strings in Markdown | ✅ **3 Modes**: Local Disk (0% Base64 AI-Ready), Ref-Base64, Stripped |
+| **Batch Multi-File Conversion** | Single file execution | ✅ Concurrent multi-file upload & tabbed document inspector |
+| **URL Extraction** | CLI parameter | ✅ Single-click web URL extraction with live validation |
+| **Export Formats** | Raw Markdown stdout | ✅ `.md`, Standalone HTML, ZIP Package (`.md` + `/images`), Print/PDF |
+| **Document Stats & Tokens** | ❌ None | ✅ Word count, character count, estimated LLM tokens, reading time |
+| **Section & Slide Navigation** | ❌ None | ✅ Dynamic pills to jump across PowerPoint slides & Markdown headings |
+| **Security Hardening** | Basic | ✅ Strict path traversal containment & Zip-Slip protection |
+
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             MARKITDOWN STUDIO WEB UI                             │
+├──────────────────────────────────────────────────────────────────────────────────┤
+│ [📁 Drag & Drop Zone]   Support: PDF, DOCX, PPTX, XLSX, HTML, CSV, Audio, URL   │
+│ [⚙️ Image Mode]          (•) Local Disk (0% Base64)  ( ) Ref-Base64  ( ) Text-Only │
+├──────────────────────────────────────────────────────────────────────────────────┤
+│ [Doc Tabs] [📄 Slide.pptx (5 ảnh)] [📄 Report.docx] [📄 Financials.xlsx]         │
+├────────────────────────────────────────┬─────────────────────────────────────────┤
+│ 📝 Raw Markdown Source (Editable)      │ ✨ Visual Preview (Synchronized 1:1)   │
+│ ────────────────────────────────────── │ ─────────────────────────────────────── │
+│ <!-- Slide number: 1 -->               │ ┌─────────────────────────────────────┐ │
+│ # AI Multi-Agent Architecture          │ │ Slide 1: AI Multi-Agent Architecture│ │
+│ ![Diagram](images/slide1_arch.png)     │ │ [Rendered High-Res Architecture]    │ │
+│                                        │ └─────────────────────────────────────┘ │
+├────────────────────────────────────────┴─────────────────────────────────────────┤
+│ ⚡ Stats: 1,420 words • 9,840 chars • ~1,850 LLM tokens • ~7 min reading time     │
+│ 🛠️ Actions: [📋 Copy] [💾 Tải .md] [🌐 Xuất HTML] [📦 Tải ZIP] [🖨️ In / PDF]      │
+└──────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Quickstart — Khởi động Web Studio
+
+#### 1. Windows (One-Click)
+Nhấp đúp chuột vào tệp tin `markitdown.bat` hoặc chạy từ Terminal:
+```cmd
+markitdown.bat
+```
+
+#### 2. Linux / macOS / Manual
+```bash
+# Kích hoạt môi trường ảo
+source .venv/bin/activate  # hoặc .venv\Scripts\activate trên Windows
+
+# Khởi chạy server FastAPI Studio
+python app.py
+```
+Trình duyệt web sẽ tự động mở tại địa chỉ `http://127.0.0.1:8000`.
+
+### REST API Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/` | Web Studio Single Page Application (HTML) |
+| `GET` | `/api/health` | Kiểm tra tình trạng server, engine chuyển đổi, danh sách định dạng hỗ trợ |
+| `POST` | `/api/convert-file` | Chuyển đổi tệp tin đơn lẻ (multipart/form-data) kèm lựa chọn bóc tách ảnh |
+| `POST` | `/api/convert-files` | Chuyển đổi hàng loạt nhiều tệp tin cùng lúc (batch processing) |
+| `POST` | `/api/convert-url` | Trích xuất nội dung từ đường dẫn web trực tuyến (HTTP/HTTPS) |
+| `POST` | `/api/download-zip` | Đóng gói tài liệu và thư mục ảnh đính kèm thành tệp `.zip` an toàn |
+| `POST` | `/api/download-all-zip`| Đóng gói toàn bộ tài liệu đã chuyển đổi trong phiên làm việc thành 1 tệp `.zip` |
+| `POST` | `/api/open-folder` | Mở thư mục ảnh an toàn trên thiết bị nội bộ (Windows Explorer) |
+
+---
+
+# Core MarkItDown Library
 
 > [!IMPORTANT]
 > MarkItDown performs I/O with the privileges of the current process. Like open() or requests.get(), it will access resources that the process itself can access. Sanitize your inputs in untrusted environments, and call the narrowest `convert_*` function needed for your use case (e.g., `convert_stream()`, or `convert_local()`). See the [Security Considerations](#security-considerations) section of the documentation for more information.
@@ -469,3 +547,13 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+---
+
+## 👨‍💻 Author & Maintainer (MarkItDown Studio Edition)
+
+- **Họ và tên:** Hoàng Chiếm Nguyên
+- **Lớp:** 65.TTQL-2
+- **MSSV:** 65132292
+- **GitHub:** [@nguyenxp3n](https://github.com/nguyenxp3n)
+
