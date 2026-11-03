@@ -66,7 +66,8 @@ app.mount(
 
 def sanitize_folder_name(name: str) -> str:
     """Sanitize folder or document stem names to prevent path traversal and unsafe characters."""
-    clean = re.sub(r"[^\w\-]", "_", Path(name).name).strip("_")
+    normalized = str(name).replace("\\", "/")
+    clean = re.sub(r"[^\w\-]", "_", Path(normalized).name).strip("_")
     return clean or "document"
 
 
